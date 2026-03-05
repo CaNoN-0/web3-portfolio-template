@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web3 Portfolio Builder — Master Template</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #FFD700;
+    --gold2: #B8860B;
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #181818;
+    --border: rgba(255,215,0,0.15);
+    --border2: rgba(255,215,0,0.3);
+    --text: #F0ECD8;
+    --muted: #888870;
+    --red: #ff4d4d;
+    --yellow: #FFD700;
+    --green: #4ade80;
+    --blue: #60a5fa;
+    --purple: #c084fc;
+    --orange: #fb923c;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding-bottom: 80px;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    background: linear-gradient(135deg, #000 0%, #111 50%, #0d0d00 100%);
+    border-bottom: 1px solid var(--border2);
+    padding: 56px 80px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(255,215,0,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(255,215,0,0.05) 0%, transparent 50%);
+  }
+  .page-header-inner { position: relative; z-index: 1; max-width: 900px; }
+  .page-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    background: rgba(255,215,0,0.08);
+    border: 1px solid rgba(255,215,0,0.25);
+    border-radius: 4px;
+    padding: 4px 12px;
+    margin-bottom: 20px;
+  }
+  .page-title {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 14px;
+    background: linear-gradient(135deg, #FFD700 0%, #fff 45%, #FFD700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .page-subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 640px;
+    line-height: 1.75;
+  }
+  .page-subtitle strong { color: var(--text); font-weight: 500; }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+    padding: 18px 24px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .dot-red { background: var(--red); box-shadow: 0 0 8px rgba(255,77,77,0.4); }
+  .dot-yellow { background: var(--yellow); box-shadow: 0 0 8px rgba(255,215,0,0.4); }
+  .dot-green { background: var(--green); box-shadow: 0 0 8px rgba(74,222,128,0.4); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-bar {
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 80px;
+    width: calc(100% - 160px);
+    margin-bottom: 0;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), #fff, var(--gold));
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 80px; }
+
+  /* ── SECTION CARD ── */
+  .section-card {
+    margin-top: 48px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .section-card:hover { border-color: var(--border2); }
+
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 22px 28px;
+    background: rgba(255,215,0,0.03);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    opacity: 0.6;
+    width: 24px;
+    flex-shrink: 0;
+  }
+  .section-icon {
+    font-size: 18px;
+    width: 36px;
+    height: 36px;
+    background: rgba(255,215,0,0.08);
+    border: 1px solid rgba(255,215,0,0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--text);
+    flex: 1;
+  }
+  .section-badge {
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .badge-required { background: rgba(255,77,77,0.12); color: #ff6b6b; border: 1px solid rgba(255,77,77,0.2); }
+  .badge-recommended { background: rgba(255,215,0,0.1); color: #FFD700; border: 1px solid rgba(255,215,0,0.2); }
+  .badge-optional { background: rgba(74,222,128,0.08); color: #4ade80; border: 1px solid rgba(74,222,128,0.15); }
+  .chevron { font-size: 12px; color: var(--muted); transition: transform 0.3s; margin-left: 8px; }
+  .section-card.open .chevron { transform: rotate(180deg); }
+
+  .section-body {
+    padding: 28px 28px 32px;
+    display: none;
+    flex-direction: column;
+    gap: 0;
+  }
+  .section-card.open .section-body { display: flex; }
+
+  /* ── FIELD ── */
+  .field {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  .field:last-child { border-bottom: none; padding-bottom: 0; }
+  .field:first-child { padding-top: 0; }
+
+  .field-label-wrap { display: flex; flex-direction: column; gap: 5px; padding-top: 10px; }
+
+  .field-priority {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .priority-red { color: #ff6b6b; }
+  .priority-yellow { color: var(--gold); }
+  .priority-green { color: #4ade80; }
+
+  .field-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.4;
+  }
+  .field-hint {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-top: 3px;
+  }
+
+  .field-input-wrap { display: flex; flex-direction: column; gap: 8px; }
+
+  input[type="text"],
+  input[type="url"],
+  input[type="email"],
+  textarea,
+  select {
+    width: 100%;
+    background: var(--bg3);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    resize: vertical;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: rgba(255,215,0,0.4);
+    box-shadow: 0 0 0 3px rgba(255,215,0,0.06);
+  }
+  textarea { min-height: 80px; }
+  select { cursor: pointer; }
+  select option { background: #111; }
+
+  /* ── OPTION PILLS ── */
+  .options-wrap { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 2px; }
+  .opt-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+    white-space: nowrap;
+  }
+  .opt-pill:hover { border-color: rgba(255,215,0,0.3); color: var(--text); }
+  .opt-pill.selected {
+    background: rgba(255,215,0,0.12);
+    border-color: rgba(255,215,0,0.45);
+    color: var(--gold);
+  }
+
+  /* ── COLOR SWATCH ── */
+  .swatch-wrap { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding-top: 4px; }
+  .swatch {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .swatch:hover { transform: scale(1.15); }
+  .swatch.selected { border-color: #fff; box-shadow: 0 0 12px rgba(255,255,255,0.3); }
+  .swatch-label { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+  /* ── TOGGLE ── */
+  .toggle-wrap { display: flex; flex-direction: column; gap: 10px; padding-top: 2px; }
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--bg3); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; }
+  .toggle-label { font-size: 13px; color: var(--text); }
+  .toggle-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .toggle {
+    position: relative; width: 40px; height: 22px;
+    background: rgba(255,255,255,0.1); border-radius: 11px; cursor: pointer; transition: background 0.3s; flex-shrink: 0;
+  }
+  .toggle.on { background: var(--gold); }
+  .toggle::after {
+    content: ''; position: absolute; top: 3px; left: 3px;
+    width: 16px; height: 16px; background: white; border-radius: 50%;
+    transition: transform 0.3s; box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+  }
+  .toggle.on::after { transform: translateX(18px); }
+
+  /* ── RANGE SLIDER ── */
+  .slider-wrap { display: flex; align-items: center; gap: 14px; }
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    flex: 1; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; outline: none; padding: 0;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 18px; height: 18px;
+    border-radius: 50%; background: var(--gold); cursor: pointer;
+    box-shadow: 0 0 8px rgba(255,215,0,0.4);
+  }
+  .slider-val { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--gold); width: 28px; text-align: right; }
+
+  /* ── TAG INPUT ── */
+  .tag-input-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .tags-display { display: flex; flex-wrap: wrap; gap: 6px; min-height: 28px; }
+  .tag-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.25);
+    border-radius: 20px; font-size: 11px; color: var(--gold); cursor: default;
+  }
+  .tag-chip button { background: none; border: none; color: var(--gold); cursor: pointer; font-size: 13px; line-height: 1; padding: 0; opacity: 0.6; }
+  .tag-chip button:hover { opacity: 1; }
+  .tag-input-row { display: flex; gap: 8px; }
+  .tag-input-row input { flex: 1; min-height: 36px; }
+  .tag-add-btn {
+    padding: 8px 16px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.25);
+    border-radius: 8px; color: var(--gold); font-size: 12px; cursor: pointer; white-space: nowrap;
+    transition: all 0.2s; font-family: 'Inter', sans-serif; flex-shrink: 0;
+  }
+  .tag-add-btn:hover { background: rgba(255,215,0,0.2); }
+
+  /* ── RADIO GROUP ── */
+  .radio-group { display: flex; flex-direction: column; gap: 8px; padding-top: 2px; }
+  .radio-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 16px; background: var(--bg3); border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px; cursor: pointer; transition: border-color 0.2s;
+  }
+  .radio-row:hover { border-color: rgba(255,215,0,0.2); }
+  .radio-row.selected { background: rgba(255,215,0,0.05); border-color: rgba(255,215,0,0.35); }
+  .radio-dot {
+    width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);
+    flex-shrink: 0; margin-top: 2px; transition: all 0.2s; position: relative;
+  }
+  .radio-row.selected .radio-dot { border-color: var(--gold); }
+  .radio-row.selected .radio-dot::after {
+    content: ''; position: absolute; inset: 3px; background: var(--gold); border-radius: 50%;
+  }
+  .radio-text-wrap { flex: 1; }
+  .radio-title { font-size: 13px; font-weight: 500; color: var(--text); }
+  .radio-desc { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+
+  /* ── IMAGE UPLOAD ── */
+  .upload-zone {
+    border: 1.5px dashed rgba(255,215,0,0.2);
+    border-radius: 10px;
+    padding: 28px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: rgba(255,215,0,0.02);
+  }
+  .upload-zone:hover { border-color: rgba(255,215,0,0.45); background: rgba(255,215,0,0.04); }
+  .upload-icon { font-size: 28px; margin-bottom: 8px; opacity: 0.6; }
+  .upload-text { font-size: 13px; color: var(--muted); }
+  .upload-text span { color: var(--gold); }
+  .upload-sub { font-size: 11px; color: rgba(136,136,112,0.6); margin-top: 4px; }
+
+  /* ── SECTION DIVIDER ── */
+  .sec-divider {
+    display: flex; align-items: center; gap: 16px;
+    margin: 52px 0 0;
+  }
+  .sec-divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); }
+  .sec-divider-label { font-size: 10px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+
+  /* ── GENERATE BUTTON ── */
+  .generate-wrap {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    background: linear-gradient(to top, rgba(10,10,10,0.98) 70%, transparent);
+    padding: 20px 80px 28px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  }
+  .generate-info { font-size: 12px; color: var(--muted); }
+  .generate-info strong { color: var(--text); font-weight: 500; }
+  .generate-info span { color: var(--gold); }
+  .generate-btn {
+    padding: 13px 36px;
+    background: linear-gradient(135deg, var(--gold), #FFC200);
+    color: #000; font-family: 'Inter', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
+    border: none; border-radius: 8px; cursor: pointer;
+    transition: all 0.3s; box-shadow: 0 4px 24px rgba(255,215,0,0.25);
+    white-space: nowrap;
+  }
+  .generate-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(255,215,0,0.4); }
+
+  /* ── COPY AREA ── */
+  .prompt-output {
+    display: none;
+    margin-top: 32px;
+    background: #050505;
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .prompt-output.visible { display: block; }
+  .prompt-output-head {
+    padding: 14px 20px; background: rgba(255,215,0,0.05);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .prompt-output-head span { font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--gold); }
+  .copy-btn {
+    padding: 6px 14px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.25);
+    border-radius: 6px; color: var(--gold); font-size: 11px; cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: all 0.2s;
+  }
+  .copy-btn:hover { background: rgba(255,215,0,0.2); }
+  .prompt-text {
+    padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: #ccc; line-height: 1.8; white-space: pre-wrap; word-break: break-word;
+    max-height: 500px; overflow-y: auto;
+  }
+
+  /* ── NOTE BOX ── */
+  .note-box {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px 16px; background: rgba(96,165,250,0.06);
+    border: 1px solid rgba(96,165,250,0.15); border-radius: 8px; margin-top: 8px;
+  }
+  .note-box-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .note-box p { font-size: 11px; color: rgba(200,210,240,0.8); line-height: 1.6; }
+
+  /* ── MULTI-INPUT ── */
+  .multi-input { display: flex; flex-direction: column; gap: 8px; }
+  .multi-row { display: flex; gap: 8px; }
+  .multi-row input { flex: 1; }
+  .multi-remove { background: rgba(255,77,77,0.1); border: 1px solid rgba(255,77,77,0.2); color: #ff6b6b; border-radius: 6px; padding: 0 10px; cursor: pointer; font-size: 16px; line-height: 1; flex-shrink: 0; transition: all 0.2s; }
+  .multi-remove:hover { background: rgba(255,77,77,0.2); }
+  .multi-add { display: flex; align-items: center; gap: 6px; background: none; border: 1px dashed rgba(255,255,255,0.1); border-radius: 6px; padding: 8px 14px; color: var(--muted); cursor: pointer; font-size: 12px; font-family: 'Inter', sans-serif; transition: all 0.2s; width: fit-content; }
+  .multi-add:hover { border-color: rgba(255,215,0,0.3); color: var(--gold); }
+
+  /* ── COLOR PICKER ── */
+  .color-picker-wrap { display: flex; align-items: center; gap: 10px; }
+  input[type="color"] { width: 36px; height: 36px; border: none; background: none; cursor: pointer; border-radius: 8px; padding: 0; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .page-header { padding: 36px 20px 32px; }
+    .container { padding: 0 20px; }
+    .field { grid-template-columns: 1fr; gap: 10px; }
+    .field-label-wrap { padding-top: 0; }
+    .generate-wrap { padding: 16px 20px 20px; flex-direction: column; align-items: stretch; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-tag">✦ Web3 Portfolio Builder — v2.0</div>
+    <h1 class="page-title">Master Portfolio<br>Prompt Template</h1>
+    <p class="page-subtitle">
+      Fill in every section below to generate a <strong>production-ready prompt</strong> for your Web3 portfolio website.
+      Covers identity, design, animations, layout orientation, interactivity, SEO, and advanced features.
+    </p>
+    <div class="legend">
+      <div class="legend-item"><div class="dot dot-red"></div> Required — must fill in</div>
+      <div class="legend-item"><div class="dot dot-yellow"></div> Recommended — strongly advised</div>
+      <div class="legend-item"><div class="dot dot-green"></div> Optional — adds extra polish</div>
+    </div>
+  </div>
+</div>
+
+<div class="container" id="mainContainer">
+
+  <!-- ── SECTION 1 — IDENTITY ── -->
+  <div class="section-card open" data-section="1">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">01</span>
+      <div class="section-icon">🪪</div>
+      <span class="section-title">Identity & Branding</span>
+      <span class="section-badge badge-required">Required</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-red">🔴 Required</span>
+          <span class="field-label">Website / Brand Name</span>
+          <span class="field-hint">The main name displayed as your brand across the site</span>
+        </div>
+        <div class="field-input-wrap">
+          <input type="text" id="brandName" placeholder="e.g. OXOLAMM" />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-red">🔴 Required</span>
+          <span class="field-label">Tagline / Subheading</span>
+          <span class="field-hint">Short punchy phrase that appears under your name</span>
+        </div>
+        <div class="field-input-wrap">
+          <input type="text" id="tagline" placeholder="e.g. Web3 Explorer & Core Community Contributor" />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">One-Liner Bio</span>
+          <span class="field-hint">Single sentence bio shown in hero section</span>
+        </div>
+        <div class="field-input-wrap">
+          <input type="text" id="bio" placeholder="e.g. I build and grow decentralized communities at the intersection of culture and crypto." />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Profile Picture URL</span>
+          <span class="field-hint">Direct link to your image (ibb.co, Imgur, Cloudinary, etc.)</span>
+        </div>
+        <div class="field-input-wrap">
+          <input type="url" id="pfpUrl" placeholder="https://example.com/your-photo.jpg" />
+          <div class="note-box">
+            <span class="note-box-icon">ℹ️</span>
+            <p>Use a direct image link (ending in .jpg, .png, .webp). ibb.co and imgbb.com links may not load — use Imgur or Cloudinary for reliability.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Profile Picture Style</span>
+          <span class="field-hint">How the image is displayed in the hero</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="pfpStyle">
+            <div class="opt-pill selected" onclick="selectOpt(this,'pfpStyle')">Circular with glow ring</div>
+            <div class="opt-pill" onclick="selectOpt(this,'pfpStyle')">Rectangle / card frame</div>
+            <div class="opt-pill" onclick="selectOpt(this,'pfpStyle')">Full-width blurred background</div>
+            <div class="opt-pill" onclick="selectOpt(this,'pfpStyle')">Square with border</div>
+            <div class="opt-pill" onclick="selectOpt(this,'pfpStyle')">Hexagon shape</div>
+            <div class="opt-pill" onclick="selectOpt(this,'pfpStyle')">No image</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Logo / Wordmark URL</span>
+          <span class="field-hint">Logo image to appear in the navbar instead of text</span>
+        </div>
+        <div class="field-input-wrap">
+          <input type="url" id="logoUrl" placeholder="https://example.com/logo.svg (leave blank for text logo)" />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Favicon</span>
+          <span class="field-hint">Small icon shown in the browser tab</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="favicon">
+            <div class="opt-pill selected" onclick="selectOpt(this,'favicon')">Use first letter of brand name</div>
+            <div class="opt-pill" onclick="selectOpt(this,'favicon')">Use emoji (specify below)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'favicon')">Use logo image</div>
+            <div class="opt-pill" onclick="selectOpt(this,'favicon')">Skip favicon</div>
+          </div>
+          <input type="text" id="faviconEmoji" placeholder="Emoji if selected above (e.g. ⚡)" style="margin-top:8px;" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 2 — DESIGN ── -->
+  <div class="section-card" data-section="2">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">02</span>
+      <div class="section-icon">🎨</div>
+      <span class="section-title">Design & Aesthetics</span>
+      <span class="section-badge badge-required">Required</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-red">🔴 Required</span>
+          <span class="field-label">Theme / Mode</span>
+          <span class="field-hint">Overall background and lighting style</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="radio-group" id="themeMode">
+            <div class="radio-row selected" onclick="selectRadio(this,'themeMode')">
+              <div class="radio-dot"></div>
+              <div class="radio-text-wrap">
+                <div class="radio-title">Dark (pure black, ultra dark)</div>
+                <div class="radio-desc">Deep black backgrounds, glowing gold/neon accents — luxury feel</div>
+              </div>
+            </div>
+            <div class="radio-row" onclick="selectRadio(this,'themeMode')">
+              <div class="radio-dot"></div>
+              <div class="radio-text-wrap">
+                <div class="radio-title">Dark Glass (frosted panels on dark)</div>
+                <div class="radio-desc">Dark base with translucent glassmorphism panels</div>
+              </div>
+            </div>
+            <div class="radio-row" onclick="selectRadio(this,'themeMode')">
+              <div class="radio-dot"></div>
+              <div class="radio-text-wrap">
+                <div class="radio-title">Light (clean, minimal)</div>
+                <div class="radio-desc">White/cream backgrounds with subtle gold accents</div>
+              </div>
+            </div>
+            <div class="radio-row" onclick="selectRadio(this,'themeMode')">
+              <div class="radio-dot"></div>
+              <div class="radio-text-wrap">
+                <div class="radio-title">Dual mode (dark + light toggle)</div>
+                <div class="radio-desc">Visitor can switch between dark and light mode</div>
+              </div>
+            </div>
+            <div class="radio-row" onclick="selectRadio(this,'themeMode')">
+              <div class="radio-dot"></div>
+              <div class="radio-text-wrap">
+                <div class="radio-title">Cyberpunk (neon on black)</div>
+                <div class="radio-desc">Neon pink, cyan, purple on very dark backgrounds</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-red">🔴 Required</span>
+          <span class="field-label">Primary Color Palette</span>
+          <span class="field-hint">Choose a preset or set custom colors below</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="colorPalette">
+            <div class="opt-pill selected" onclick="selectOpt(this,'colorPalette')">Gold & Black (#FFD700)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'colorPalette')">Neon Web3 (Pink + Cyan + Purple)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'colorPalette')">Ocean Blue (#0EA5E9)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'colorPalette')">Emerald Green (#10B981)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'colorPalette')">Electric Purple (#8B5CF6)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'colorPalette')">Coral Orange (#F97316)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'colorPalette')">Arctic White + Silver</div>
+            <div class="opt-pill" onclick="selectOpt(this,'colorPalette')">Custom (specify below)</div>
+          </div>
+          <div style="margin-top:12px; display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+            <div class="color-picker-wrap">
+              <label style="font-size:11px;color:var(--muted);">Primary</label>
+              <input type="color" id="color1" value="#FFD700" />
+            </div>
+            <div class="color-picker-wrap">
+              <label style="font-size:11px;color:var(--muted);">Secondary</label>
+              <input type="color" id="color2" value="#B8860B" />
+            </div>
+            <div class="color-picker-wrap">
+              <label style="font-size:11px;color:var(--muted);">Accent</label>
+              <input type="color" id="color3" value="#FFFFFF" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-red">🔴 Required</span>
+          <span class="field-label">Vibe / Aesthetic</span>
+          <span class="field-hint">Overall visual personality of the site</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="vibeAesthetic">
+            <div class="opt-pill selected" onclick="selectOpt(this,'vibeAesthetic')">Luxury / High-end</div>
+            <div class="opt-pill" onclick="selectOpt(this,'vibeAesthetic')">Glassmorphism</div>
+            <div class="opt-pill" onclick="selectOpt(this,'vibeAesthetic')">Cyberpunk / Futuristic</div>
+            <div class="opt-pill" onclick="selectOpt(this,'vibeAesthetic')">Minimal / Clean</div>
+            <div class="opt-pill" onclick="selectOpt(this,'vibeAesthetic')">Brutalist / Bold</div>
+            <div class="opt-pill" onclick="selectOpt(this,'vibeAesthetic')">Retro / Pixel Art</div>
+            <div class="opt-pill" onclick="selectOpt(this,'vibeAesthetic')">Corporate / Professional</div>
+            <div class="opt-pill" onclick="selectOpt(this,'vibeAesthetic')">Neumorphism / Soft UI</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Font Style</span>
+          <span class="field-hint">Typography combination for headings + body</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="fontStyle">
+            <div class="opt-pill selected" onclick="selectOpt(this,'fontStyle')">Rajdhani (modern, clean)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'fontStyle')">Orbitron (geometric, techy)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'fontStyle')">Inter (clean, readable)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'fontStyle')">Cormorant Garamond (elegant, serif)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'fontStyle')">Space Grotesk (modern, balanced)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'fontStyle')">JetBrains Mono (developer, code)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'fontStyle')">Poppins (friendly, rounded)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'fontStyle')">Custom (specify below)</div>
+          </div>
+          <input type="text" id="customFont" placeholder="Custom Google Font name (e.g. Syne)" style="margin-top:8px;" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 3 — ANIMATIONS ── -->
+  <div class="section-card" data-section="3">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">03</span>
+      <div class="section-icon">✨</div>
+      <span class="section-title">Animations & Visual Effects</span>
+      <span class="section-badge badge-recommended">Recommended</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Animation Intensity</span>
+          <span class="field-hint">How much animation to include across the site</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="slider-wrap">
+            <input type="range" id="animLevel" min="0" max="4" value="3" oninput="updateSlider(this,'animLevelVal',['None','Minimal','Moderate','Rich','Heavy'])">
+            <span class="slider-val" id="animLevelVal">Rich</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;">
+            <span style="font-size:10px;color:var(--muted);">None</span>
+            <span style="font-size:10px;color:var(--muted);">Minimal</span>
+            <span style="font-size:10px;color:var(--muted);">Moderate</span>
+            <span style="font-size:10px;color:var(--muted);">Rich</span>
+            <span style="font-size:10px;color:var(--muted);">Heavy</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Scroll Animation Style</span>
+          <span class="field-hint">How sections appear as you scroll down</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="scrollAnim">
+            <div class="opt-pill selected" onclick="selectOpt(this,'scrollAnim')">Fade up (slide in from below)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'scrollAnim')">Fade in (opacity only)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'scrollAnim')">Slide from left / right</div>
+            <div class="opt-pill" onclick="selectOpt(this,'scrollAnim')">Scale in (zoom from small)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'scrollAnim')">Flip in (3D flip)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'scrollAnim')">Stagger cascade (one by one)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'scrollAnim')">No scroll animations</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Special Visual Effects</span>
+          <span class="field-hint">Background and interactive effects (multi-select)</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="toggle-wrap" id="visualFx">
+            <div class="toggle-row"><div><div class="toggle-label">Particle system / floating dots</div><div class="toggle-sub">Animated gold dots that float and connect with lines</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Matrix rain effect</div><div class="toggle-sub">Falling characters in the background (gold or green)</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Floating glowing orbs</div><div class="toggle-sub">Soft glowing circles that drift slowly across the page</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Animated grid background</div><div class="toggle-sub">Subtle dot or line grid in the background</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Gradient mesh background</div><div class="toggle-sub">Soft radial gradient blobs layered behind content</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Glitch text effect (on name)</div><div class="toggle-sub">Periodic glitch animation on the main heading</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Custom cursor</div><div class="toggle-sub">Replace browser cursor with a styled gold cursor + trailer</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Scanline overlay</div><div class="toggle-sub">Subtle CRT scanlines over the entire page</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">3D tilt cards on hover</div><div class="toggle-sub">Cards tilt in 3D when hovered (Vanilla Tilt effect)</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Typewriter text animation</div><div class="toggle-sub">Hero subtitle types itself out character by character</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Noise / grain texture overlay</div><div class="toggle-sub">Subtle film grain over backgrounds for texture</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Parallax scrolling sections</div><div class="toggle-sub">Background moves slower than content while scrolling</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Hover Effects on Cards</span>
+          <span class="field-hint">What happens when user hovers over cards/elements</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="hoverFx">
+            <div class="opt-pill selected" onclick="selectOpt(this,'hoverFx')">Glow + lift (translate up)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'hoverFx')">Border highlight only</div>
+            <div class="opt-pill" onclick="selectOpt(this,'hoverFx')">Scale zoom in</div>
+            <div class="opt-pill" onclick="selectOpt(this,'hoverFx')">Background color fill sweep</div>
+            <div class="opt-pill" onclick="selectOpt(this,'hoverFx')">3D tilt effect</div>
+            <div class="opt-pill" onclick="selectOpt(this,'hoverFx')">None</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Page Load Animation</span>
+          <span class="field-hint">How the page enters when first loaded</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="pageLoad">
+            <div class="opt-pill selected" onclick="selectOpt(this,'pageLoad')">Fade in from black</div>
+            <div class="opt-pill" onclick="selectOpt(this,'pageLoad')">Splash / intro screen with logo</div>
+            <div class="opt-pill" onclick="selectOpt(this,'pageLoad')">Hero slides in from top</div>
+            <div class="opt-pill" onclick="selectOpt(this,'pageLoad')">Elements stagger in one by one</div>
+            <div class="opt-pill" onclick="selectOpt(this,'pageLoad')">No load animation</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 4 — LAYOUT ORIENTATION ── -->
+  <div class="section-card" data-section="4">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">04</span>
+      <div class="section-icon">📐</div>
+      <span class="section-title">Layout & Orientation</span>
+      <span class="section-badge badge-recommended">Recommended</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Hero Layout Orientation</span>
+          <span class="field-hint">How the hero section is arranged</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="radio-group" id="heroLayout">
+            <div class="radio-row selected" onclick="selectRadio(this,'heroLayout')"><div class="radio-dot"></div><div class="radio-text-wrap"><div class="radio-title">Text left + Image right</div><div class="radio-desc">Classic split layout — most popular for portfolios</div></div></div>
+            <div class="radio-row" onclick="selectRadio(this,'heroLayout')"><div class="radio-dot"></div><div class="radio-text-wrap"><div class="radio-title">Centered (text + image stacked)</div><div class="radio-desc">Everything centered on one axis, image above or below text</div></div></div>
+            <div class="radio-row" onclick="selectRadio(this,'heroLayout')"><div class="radio-dot"></div><div class="radio-text-wrap"><div class="radio-title">Full-screen image background with text overlay</div><div class="radio-desc">Profile photo fills entire hero, text overlaid on top</div></div></div>
+            <div class="radio-row" onclick="selectRadio(this,'heroLayout')"><div class="radio-dot"></div><div class="radio-text-wrap"><div class="radio-title">Text right + Image left</div><div class="radio-desc">Reversed split layout</div></div></div>
+            <div class="radio-row" onclick="selectRadio(this,'heroLayout')"><div class="radio-dot"></div><div class="radio-text-wrap"><div class="radio-title">Text only (no profile image in hero)</div><div class="radio-desc">Pure typography-driven hero</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Section Layout Style</span>
+          <span class="field-hint">How content sections are arranged throughout the page</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="sectionLayout">
+            <div class="opt-pill selected" onclick="selectOpt(this,'sectionLayout')">Full-width stacked sections</div>
+            <div class="opt-pill" onclick="selectOpt(this,'sectionLayout')">Centered content max-width</div>
+            <div class="opt-pill" onclick="selectOpt(this,'sectionLayout')">Alternating left/right layout</div>
+            <div class="opt-pill" onclick="selectOpt(this,'sectionLayout')">Sidebar + main content</div>
+            <div class="opt-pill" onclick="selectOpt(this,'sectionLayout')">Masonry / bento grid</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Content Spacing</span>
+          <span class="field-hint">How much breathing room between sections</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="slider-wrap">
+            <input type="range" id="spacing" min="0" max="3" value="2" oninput="updateSlider(this,'spacingVal',['Compact','Normal','Spacious','Luxurious'])">
+            <span class="slider-val" id="spacingVal" style="width:70px;">Spacious</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;">
+            <span style="font-size:10px;color:var(--muted);">Compact</span>
+            <span style="font-size:10px;color:var(--muted);">Normal</span>
+            <span style="font-size:10px;color:var(--muted);">Spacious</span>
+            <span style="font-size:10px;color:var(--muted);">Luxurious</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Mobile Orientation</span>
+          <span class="field-hint">How the mobile layout adapts from desktop</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="mobileLayout">
+            <div class="opt-pill selected" onclick="selectOpt(this,'mobileLayout')">Stacked (single column)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'mobileLayout')">Two-column grid on tablets</div>
+            <div class="opt-pill" onclick="selectOpt(this,'mobileLayout')">Horizontal scroll cards on mobile</div>
+            <div class="opt-pill" onclick="selectOpt(this,'mobileLayout')">Full-screen swipe sections</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Card Border Radius</span>
+          <span class="field-hint">How rounded the corners of cards and elements are</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="borderRadius">
+            <div class="opt-pill" onclick="selectOpt(this,'borderRadius')">Sharp (0px)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'borderRadius')">Slight (4px)</div>
+            <div class="opt-pill selected" onclick="selectOpt(this,'borderRadius')">Standard (8–12px)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'borderRadius')">Rounded (16–20px)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'borderRadius')">Pill (32px+)</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 5 — NAVIGATION ── -->
+  <div class="section-card" data-section="5">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">05</span>
+      <div class="section-icon">🧭</div>
+      <span class="section-title">Navigation</span>
+      <span class="section-badge badge-required">Required</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-red">🔴 Required</span>
+          <span class="field-label">Navigation Style</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="radio-group" id="navStyle">
+            <div class="radio-row selected" onclick="selectRadio(this,'navStyle')"><div class="radio-dot"></div><div class="radio-text-wrap"><div class="radio-title">Sticky top bar — hides on scroll down, shows on scroll up</div><div class="radio-desc">Saves screen space, feels modern</div></div></div>
+            <div class="radio-row" onclick="selectRadio(this,'navStyle')"><div class="radio-dot"></div><div class="radio-text-wrap"><div class="radio-title">Sticky top bar — always visible</div><div class="radio-desc">Nav is always on screen</div></div></div>
+            <div class="radio-row" onclick="selectRadio(this,'navStyle')"><div class="radio-dot"></div><div class="radio-text-wrap"><div class="radio-title">Fixed side rail (vertical nav)</div><div class="radio-desc">Navigation on the left or right side of the page</div></div></div>
+            <div class="radio-row" onclick="selectRadio(this,'navStyle')"><div class="radio-dot"></div><div class="radio-text-wrap"><div class="radio-title">Floating pill nav (centered)</div><div class="radio-desc">Compact floating nav bar that sits in the middle of the top</div></div></div>
+            <div class="radio-row" onclick="selectRadio(this,'navStyle')"><div class="radio-dot"></div><div class="radio-text-wrap"><div class="radio-title">Hamburger menu only</div><div class="radio-desc">No visible nav links — only a hamburger icon that opens a menu</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Navigation Links</span>
+          <span class="field-hint">Add the page sections to link to (in order)</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="tag-input-wrap">
+            <div class="tags-display" id="navLinkTags">
+              <span class="tag-chip">Home <button onclick="removeTag(this,'navLinkTags')">×</button></span>
+              <span class="tag-chip">About <button onclick="removeTag(this,'navLinkTags')">×</button></span>
+              <span class="tag-chip">What I Do <button onclick="removeTag(this,'navLinkTags')">×</button></span>
+              <span class="tag-chip">Projects <button onclick="removeTag(this,'navLinkTags')">×</button></span>
+              <span class="tag-chip">Contact <button onclick="removeTag(this,'navLinkTags')">×</button></span>
+            </div>
+            <div class="tag-input-row">
+              <input type="text" id="navLinkInput" placeholder="Add a nav link (e.g. Blog)" onkeydown="if(event.key==='Enter') addTag('navLinkInput','navLinkTags')" />
+              <button class="tag-add-btn" onclick="addTag('navLinkInput','navLinkTags')">+ Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Nav Extra Features</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="toggle-wrap">
+            <div class="toggle-row"><div><div class="toggle-label">Active section highlighting</div><div class="toggle-sub">Current section link highlights as you scroll</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Scroll progress bar</div><div class="toggle-sub">Thin gold line at top showing reading progress</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">CTA button in navbar</div><div class="toggle-sub">e.g. "Hire Me" button on the right side of the nav</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Mobile hamburger menu</div><div class="toggle-sub">Collapse nav into a hamburger icon on mobile</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 6 — HERO ── -->
+  <div class="section-card" data-section="6">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">06</span>
+      <div class="section-icon">⚡</div>
+      <span class="section-title">Hero Section</span>
+      <span class="section-badge badge-required">Required</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-red">🔴 Required</span>
+          <span class="field-label">Main Heading</span>
+          <span class="field-hint">The largest text on the page — usually your brand name</span>
+        </div>
+        <div class="field-input-wrap">
+          <input type="text" id="heroHeading" placeholder="e.g. OXOLAMM" />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-red">🔴 Required</span>
+          <span class="field-label">Sub Heading</span>
+          <span class="field-hint">Description below the main heading</span>
+        </div>
+        <div class="field-input-wrap">
+          <input type="text" id="heroSub" placeholder="e.g. Web3 Explorer & Core Community Contributor" />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Hero Button 1 (Primary)</span>
+        </div>
+        <div class="field-input-wrap" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <input type="text" id="btn1Text" placeholder="Button text (e.g. Explore My Work)" />
+          <input type="text" id="btn1Link" placeholder="Link to (e.g. #projects or URL)" />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Hero Button 2 (Secondary)</span>
+        </div>
+        <div class="field-input-wrap" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <input type="text" id="btn2Text" placeholder="Button text (e.g. Connect With Me)" />
+          <input type="text" id="btn2Link" placeholder="Link to (e.g. #contact or URL)" />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Live Status Badge</span>
+          <span class="field-hint">Small pill badge showing your availability</span>
+        </div>
+        <div class="field-input-wrap">
+          <input type="text" id="statusBadge" placeholder="e.g. Open to Opportunities · Available for Collabs" />
+          <div class="options-wrap" id="badgeColor" style="margin-top:8px;">
+            <div class="opt-pill selected" onclick="selectOpt(this,'badgeColor')">Green pulse dot</div>
+            <div class="opt-pill" onclick="selectOpt(this,'badgeColor')">Gold glow dot</div>
+            <div class="opt-pill" onclick="selectOpt(this,'badgeColor')">Animated rainbow border</div>
+            <div class="opt-pill" onclick="selectOpt(this,'badgeColor')">No dot, text only</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Hero Statistics / Counters</span>
+          <span class="field-hint">Add up to 4 animated number stats (e.g. 2+ Years, 10K+ Members)</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="multi-input" id="statsMulti">
+            <div class="multi-row">
+              <input type="text" placeholder="Number/value (e.g. 2+)" style="flex:0.6;" />
+              <input type="text" placeholder="Label (e.g. Years in Web3)" />
+              <button class="multi-remove" onclick="removeMultiRow(this)">×</button>
+            </div>
+          </div>
+          <button class="multi-add" onclick="addMultiRow('statsMulti','Number/value (e.g. 5K+)','Label (e.g. Community Members)')">+ Add Stat</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Scroll Indicator</span>
+          <span class="field-hint">Arrow / icon at bottom of hero to indicate scrollability</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="scrollIndicator">
+            <div class="opt-pill selected" onclick="selectOpt(this,'scrollIndicator')">Bouncing arrow (↓)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'scrollIndicator')">Animated scroll mouse icon</div>
+            <div class="opt-pill" onclick="selectOpt(this,'scrollIndicator')">Scroll text (SCROLL)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'scrollIndicator')">None</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 7 — ABOUT ── -->
+  <div class="section-card" data-section="7">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">07</span>
+      <div class="section-icon">👤</div>
+      <span class="section-title">About Me</span>
+      <span class="section-badge badge-recommended">Recommended</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Include About Section?</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="includeAbout">
+            <div class="opt-pill selected" onclick="selectOpt(this,'includeAbout')">Yes</div>
+            <div class="opt-pill" onclick="selectOpt(this,'includeAbout')">No</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">About Bio Text</span>
+          <span class="field-hint">2–4 sentences about you and your journey</span>
+        </div>
+        <div class="field-input-wrap">
+          <textarea id="aboutText" placeholder="e.g. I've been navigating the Web3 space since 2021, building and growing communities for DeFi protocols, NFT projects, and DAOs. I'm passionate about onboarding the next billion users into crypto." style="min-height:100px;"></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Personal Details Table</span>
+          <span class="field-hint">Key/value pairs shown in a table</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="multi-input" id="detailsMulti">
+            <div class="multi-row"><input type="text" placeholder="Key (e.g. Location)" style="flex:0.7;"/><input type="text" placeholder="Value (e.g. Lagos, Nigeria)"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button></div>
+            <div class="multi-row"><input type="text" placeholder="Key" style="flex:0.7;" value="Availability"/><input type="text" placeholder="Value" value="Open to Opportunities"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button></div>
+            <div class="multi-row"><input type="text" placeholder="Key" style="flex:0.7;" value="Experience"/><input type="text" placeholder="Value" value="2+ Years"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button></div>
+            <div class="multi-row"><input type="text" placeholder="Key" style="flex:0.7;" value="Timezone"/><input type="text" placeholder="Value" value="UTC+1 / WAT"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button></div>
+          </div>
+          <button class="multi-add" onclick="addMultiRow('detailsMulti','Key (e.g. Languages)','Value (e.g. English, French)')">+ Add Row</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Fun Facts / Interests</span>
+          <span class="field-hint">A few bullet points about your passions or hobbies</span>
+        </div>
+        <div class="field-input-wrap">
+          <textarea id="funFacts" placeholder="e.g. Passionate about DeFi, NFT culture, and building the decentralized future." style="min-height:72px;"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 8 — SERVICES ── -->
+  <div class="section-card" data-section="8">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">08</span>
+      <div class="section-icon">🛠</div>
+      <span class="section-title">Services / What I Do</span>
+      <span class="section-badge badge-required">Required</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-red">🔴 Required</span>
+          <span class="field-label">Section Display Style</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="serviceStyle">
+            <div class="opt-pill selected" onclick="selectOpt(this,'serviceStyle')">Glowing cards (2×2 grid)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'serviceStyle')">Clickable tabs with detail panel</div>
+            <div class="opt-pill" onclick="selectOpt(this,'serviceStyle')">Accordion (expand on click)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'serviceStyle')">Icon list (horizontal rows)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'serviceStyle')">Timeline style</div>
+            <div class="opt-pill" onclick="selectOpt(this,'serviceStyle')">Bento grid (different card sizes)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-red">🔴 Required</span>
+          <span class="field-label">Services List</span>
+          <span class="field-hint">Name + short description for each service</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="multi-input" id="servicesMulti">
+            <div class="multi-row"><input type="text" placeholder="Service name" style="flex:0.8;"/><input type="text" placeholder="Short description"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button></div>
+            <div class="multi-row"><input type="text" placeholder="Service name" style="flex:0.8;"/><input type="text" placeholder="Short description"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button></div>
+          </div>
+          <button class="multi-add" onclick="addMultiRow('servicesMulti','Service name','Short description')">+ Add Service</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 9 — SKILLS ── -->
+  <div class="section-card" data-section="9">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">09</span>
+      <div class="section-icon">📊</div>
+      <span class="section-title">Skills & Tech Stack</span>
+      <span class="section-badge badge-recommended">Recommended</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Skills Display Style</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="skillStyle">
+            <div class="opt-pill selected" onclick="selectOpt(this,'skillStyle')">Animated progress bars</div>
+            <div class="opt-pill" onclick="selectOpt(this,'skillStyle')">Radial / circular progress</div>
+            <div class="opt-pill" onclick="selectOpt(this,'skillStyle')">Hexagon grid</div>
+            <div class="opt-pill" onclick="selectOpt(this,'skillStyle')">Star rating</div>
+            <div class="opt-pill" onclick="selectOpt(this,'skillStyle')">Tag cloud / floating badges</div>
+            <div class="opt-pill" onclick="selectOpt(this,'skillStyle')">Text list only</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Skills with Percentages</span>
+          <span class="field-hint">Skill name and proficiency %</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="multi-input" id="skillsMulti">
+            <div class="multi-row"><input type="text" placeholder="Skill name" style="flex:1;"/><input type="text" placeholder="%" style="flex:0.3;max-width:70px;"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button></div>
+            <div class="multi-row"><input type="text" placeholder="Skill name" style="flex:1;"/><input type="text" placeholder="%" style="flex:0.3;max-width:70px;"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button></div>
+            <div class="multi-row"><input type="text" placeholder="Skill name" style="flex:1;"/><input type="text" placeholder="%" style="flex:0.3;max-width:70px;"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button></div>
+          </div>
+          <button class="multi-add" onclick="addMultiRowThree('skillsMulti')">+ Add Skill</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Tool / Platform Badges</span>
+          <span class="field-hint">Web3 tools, platforms, or apps you use</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="tag-input-wrap">
+            <div class="tags-display" id="toolBadges">
+              <span class="tag-chip">Twitter/X <button onclick="removeTag(this,'toolBadges')">×</button></span>
+              <span class="tag-chip">Discord <button onclick="removeTag(this,'toolBadges')">×</button></span>
+              <span class="tag-chip">Telegram <button onclick="removeTag(this,'toolBadges')">×</button></span>
+              <span class="tag-chip">Zealy <button onclick="removeTag(this,'toolBadges')">×</button></span>
+            </div>
+            <div class="tag-input-row">
+              <input type="text" id="toolInput" placeholder="Add a tool or platform" onkeydown="if(event.key==='Enter') addTag('toolInput','toolBadges')" />
+              <button class="tag-add-btn" onclick="addTag('toolInput','toolBadges')">+ Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 10 — PROJECTS ── -->
+  <div class="section-card" data-section="10">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">10</span>
+      <div class="section-icon">🏗</div>
+      <span class="section-title">Portfolio / Projects</span>
+      <span class="section-badge badge-recommended">Recommended</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Projects Display Style</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="projStyle">
+            <div class="opt-pill selected" onclick="selectOpt(this,'projStyle')">Minimal numbered list</div>
+            <div class="opt-pill" onclick="selectOpt(this,'projStyle')">Card grid with image thumbnails</div>
+            <div class="opt-pill" onclick="selectOpt(this,'projStyle')">Carousel / slider</div>
+            <div class="opt-pill" onclick="selectOpt(this,'projStyle')">Bento grid (varied sizes)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'projStyle')">Timeline / case study style</div>
+            <div class="opt-pill" onclick="selectOpt(this,'projStyle')">Filterable by category</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Projects</span>
+          <span class="field-hint">Title, description, and tags for each project</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="multi-input" id="projectsMulti">
+            <div class="multi-row"><input type="text" placeholder="Project title" style="flex:0.8;"/><input type="text" placeholder="Short description"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button></div>
+          </div>
+          <button class="multi-add" onclick="addMultiRow('projectsMulti','Project title','Short description + result')">+ Add Project</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Project Link Style</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="projLinks">
+            <div class="opt-pill selected" onclick="selectOpt(this,'projLinks')">No links (display only)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'projLinks')">Live site link button</div>
+            <div class="opt-pill" onclick="selectOpt(this,'projLinks')">Case study modal popup</div>
+            <div class="opt-pill" onclick="selectOpt(this,'projLinks')">GitHub link</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 11 — TESTIMONIALS ── -->
+  <div class="section-card" data-section="11">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">11</span>
+      <div class="section-icon">💬</div>
+      <span class="section-title">Testimonials</span>
+      <span class="section-badge badge-optional">Optional</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Include Testimonials?</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="includeTest">
+            <div class="opt-pill selected" onclick="selectOpt(this,'includeTest')">Yes</div>
+            <div class="opt-pill" onclick="selectOpt(this,'includeTest')">No</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Testimonials Display Style</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="testStyle">
+            <div class="opt-pill selected" onclick="selectOpt(this,'testStyle')">Cards in a grid</div>
+            <div class="opt-pill" onclick="selectOpt(this,'testStyle')">Auto-scrolling marquee</div>
+            <div class="opt-pill" onclick="selectOpt(this,'testStyle')">Large single quote block</div>
+            <div class="opt-pill" onclick="selectOpt(this,'testStyle')">Carousel / slider</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Testimonials</span>
+          <span class="field-hint">Quote + name + role</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="multi-input" id="testMulti">
+            <div class="multi-row"><input type="text" placeholder="Quote" style="flex:2;"/><input type="text" placeholder="Name" /><input type="text" placeholder="Role / Company" /><button class="multi-remove" onclick="removeMultiRow(this)">×</button></div>
+          </div>
+          <button class="multi-add" onclick="addMultiRowFour('testMulti')">+ Add Testimonial</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 12 — BLOG ── -->
+  <div class="section-card" data-section="12">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">12</span>
+      <div class="section-icon">📝</div>
+      <span class="section-title">Blog / Articles</span>
+      <span class="section-badge badge-optional">Optional</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Include Blog Section?</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="includeBlog">
+            <div class="opt-pill selected" onclick="selectOpt(this,'includeBlog')">No</div>
+            <div class="opt-pill" onclick="selectOpt(this,'includeBlog')">Yes — static article cards</div>
+            <div class="opt-pill" onclick="selectOpt(this,'includeBlog')">Yes — link to Medium / Mirror</div>
+            <div class="opt-pill" onclick="selectOpt(this,'includeBlog')">Yes — link to Substack</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Blog Link URL</span>
+          <span class="field-hint">If linking to an external platform</span>
+        </div>
+        <div class="field-input-wrap">
+          <input type="url" id="blogUrl" placeholder="https://mirror.xyz/... or https://medium.com/@..." />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 13 — SOCIALS & CONTACT ── -->
+  <div class="section-card" data-section="13">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">13</span>
+      <div class="section-icon">🌐</div>
+      <span class="section-title">Socials & Contact</span>
+      <span class="section-badge badge-required">Required</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-red">🔴 Required</span>
+          <span class="field-label">Social Links</span>
+          <span class="field-hint">Enter your handles or full URLs</span>
+        </div>
+        <div class="field-input-wrap" style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:8px;align-items:center;"><span style="font-size:12px;color:var(--muted);width:90px;flex-shrink:0;">Twitter / X</span><input type="text" id="socialX" placeholder="@username or URL" /></div>
+          <div style="display:flex;gap:8px;align-items:center;"><span style="font-size:12px;color:var(--muted);width:90px;flex-shrink:0;">Telegram</span><input type="text" id="socialTg" placeholder="@username or t.me/..." /></div>
+          <div style="display:flex;gap:8px;align-items:center;"><span style="font-size:12px;color:var(--muted);width:90px;flex-shrink:0;">Discord</span><input type="text" id="socialDc" placeholder="Username or invite link" /></div>
+          <div style="display:flex;gap:8px;align-items:center;"><span style="font-size:12px;color:var(--muted);width:90px;flex-shrink:0;">LinkedIn</span><input type="url" id="socialLi" placeholder="https://linkedin.com/in/..." /></div>
+          <div style="display:flex;gap:8px;align-items:center;"><span style="font-size:12px;color:var(--muted);width:90px;flex-shrink:0;">GitHub</span><input type="url" id="socialGh" placeholder="https://github.com/..." /></div>
+          <div style="display:flex;gap:8px;align-items:center;"><span style="font-size:12px;color:var(--muted);width:90px;flex-shrink:0;">Email</span><input type="email" id="socialEmail" placeholder="your@email.com" /></div>
+          <div style="display:flex;gap:8px;align-items:center;"><span style="font-size:12px;color:var(--muted);width:90px;flex-shrink:0;">Website</span><input type="url" id="socialWeb" placeholder="https://yourwebsite.com" /></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Contact Section Style</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="contactStyle">
+            <div class="opt-pill selected" onclick="selectOpt(this,'contactStyle')">Social icons + email link</div>
+            <div class="opt-pill" onclick="selectOpt(this,'contactStyle')">Contact form (name, email, message)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'contactStyle')">Large CTA with social cards</div>
+            <div class="opt-pill" onclick="selectOpt(this,'contactStyle')">Calendly / booking embed</div>
+            <div class="opt-pill" onclick="selectOpt(this,'contactStyle')">Email only</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">CTA Text (above socials)</span>
+        </div>
+        <div class="field-input-wrap">
+          <input type="text" id="ctaText" placeholder="e.g. Let's Build Together" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 14 — FOOTER ── -->
+  <div class="section-card" data-section="14">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">14</span>
+      <div class="section-icon">🔚</div>
+      <span class="section-title">Footer</span>
+      <span class="section-badge badge-recommended">Recommended</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-yellow">🟡 Recommended</span>
+          <span class="field-label">Footer Content</span>
+        </div>
+        <div class="field-input-wrap">
+          <input type="text" id="footerText" placeholder="e.g. © 2026 OXOLAMM. All rights reserved." />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Footer Style</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="options-wrap" id="footerStyle">
+            <div class="opt-pill selected" onclick="selectOpt(this,'footerStyle')">Minimal single line</div>
+            <div class="opt-pill" onclick="selectOpt(this,'footerStyle')">Two columns (brand + links)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'footerStyle')">Three columns (brand + nav + socials)</div>
+            <div class="opt-pill" onclick="selectOpt(this,'footerStyle')">Large footer with newsletter signup</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SECTION 15 — EXTRA FEATURES ── -->
+  <div class="section-card" data-section="15">
+    <div class="section-head" onclick="toggleSection(this)">
+      <span class="section-num">15</span>
+      <div class="section-icon">⚙️</div>
+      <span class="section-title">Extra Features & Widgets</span>
+      <span class="section-badge badge-optional">Optional</span>
+      <span class="chevron">▼</span>
+    </div>
+    <div class="section-body">
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Website Features</span>
+          <span class="field-hint">Toggle on the features you want included</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="toggle-wrap">
+            <div class="toggle-row"><div><div class="toggle-label">Dark / Light mode toggle</div><div class="toggle-sub">Button to switch between dark and light themes</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Live crypto price ticker</div><div class="toggle-sub">Scrolling bar at bottom showing BTC, ETH, SOL prices</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Back to top button</div><div class="toggle-sub">Button that appears when scrolling down to jump back up</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Reading progress bar</div><div class="toggle-sub">Thin colored bar at top showing scroll position</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Floating "Hire Me" / CTA button</div><div class="toggle-sub">Fixed button that floats over the page at all times</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Cookie consent banner</div><div class="toggle-sub">GDPR-style banner at the bottom of the page</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Language switcher</div><div class="toggle-sub">Toggle between multiple language versions</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Download CV / Resume button</div><div class="toggle-sub">Button that opens/downloads a PDF resume</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Availability calendar embed</div><div class="toggle-sub">Calendly or Cal.com embed for booking calls</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">NFT / wallet showcase section</div><div class="toggle-sub">Display your NFT collection or wallet highlights</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">SEO & Meta</span>
+          <span class="field-hint">Site metadata for search engines and social sharing</span>
+        </div>
+        <div class="field-input-wrap" style="display:flex;flex-direction:column;gap:8px;">
+          <input type="text" id="metaTitle" placeholder="Meta title (e.g. OXOLAMM | Web3 Community Manager)" />
+          <textarea id="metaDesc" placeholder="Meta description (1–2 sentences for Google search results)" style="min-height:60px;"></textarea>
+          <input type="text" id="ogImage" placeholder="OG image URL (shown when sharing on Twitter/Discord)" />
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Performance Settings</span>
+        </div>
+        <div class="field-input-wrap">
+          <div class="toggle-wrap">
+            <div class="toggle-row"><div><div class="toggle-label">Lazy load images</div><div class="toggle-sub">Images load only when scrolled into view</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Reduce motion for accessibility</div><div class="toggle-sub">Respect prefers-reduced-motion browser setting</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="toggle-row"><div><div class="toggle-label">Mobile-first responsive design</div><div class="toggle-sub">Designed for mobile first, then desktop</div></div><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-label-wrap">
+          <span class="field-priority priority-green">🟢 Optional</span>
+          <span class="field-label">Additional Notes</span>
+          <span class="field-hint">Any extra instructions or preferences not covered above</span>
+        </div>
+        <div class="field-input-wrap">
+          <textarea id="extraNotes" placeholder="e.g. Make sure the contact section comes before testimonials. Use Orbitron only for the main heading, not all headers. Add a subtle noise texture to the hero background..." style="min-height:100px;"></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PROMPT OUTPUT -->
+  <div class="prompt-output" id="promptOutput">
+    <div class="prompt-output-head">
+      <span>📋 Generated Prompt — Copy & paste into Claude</span>
+      <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">Copy Prompt</button>
+    </div>
+    <div class="prompt-text" id="promptText"></div>
+  </div>
+
+  <div style="height:100px;"></div>
+
+</div><!-- /container -->
+
+<!-- GENERATE BAR -->
+<div class="generate-wrap">
+  <div class="generate-info">
+    Fill in the sections above, then click Generate to build your prompt.<br>
+    <span>Tip: Red fields are required — all others add more detail and precision.</span>
+  </div>
+  <button class="generate-btn" onclick="generatePrompt()">✦ Generate Prompt</button>
+</div>
+
+<script>
+// ── TOGGLE SECTION ──
+function toggleSection(head) {
+  const card = head.closest('.section-card');
+  card.classList.toggle('open');
+}
+
+// ── SELECT OPTION PILL ──
+function selectOpt(el, groupId) {
+  document.getElementById(groupId)?.querySelectorAll('.opt-pill')
+    .forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ── SELECT RADIO ──
+function selectRadio(el, groupId) {
+  document.getElementById(groupId)?.querySelectorAll('.radio-row')
+    .forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ── SLIDER ──
+function updateSlider(input, valId, labels) {
+  document.getElementById(valId).textContent = labels[input.value];
+}
+
+// ── TAGS ──
+function addTag(inputId, containerId) {
+  const input = document.getElementById(inputId);
+  const val = input.value.trim();
+  if (!val) return;
+  const container = document.getElementById(containerId);
+  const chip = document.createElement('span');
+  chip.className = 'tag-chip';
+  chip.innerHTML = `${val} <button onclick="removeTag(this,'${containerId}')">×</button>`;
+  container.appendChild(chip);
+  input.value = '';
+}
+function removeTag(btn, containerId) {
+  btn.closest('.tag-chip').remove();
+}
+
+// ── MULTI ROW ──
+function addMultiRow(containerId, p1, p2) {
+  const c = document.getElementById(containerId);
+  const row = document.createElement('div');
+  row.className = 'multi-row';
+  row.innerHTML = `<input type="text" placeholder="${p1}" style="flex:0.8;"/><input type="text" placeholder="${p2}"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button>`;
+  c.appendChild(row);
+}
+function addMultiRowThree(containerId) {
+  const c = document.getElementById(containerId);
+  const row = document.createElement('div');
+  row.className = 'multi-row';
+  row.innerHTML = `<input type="text" placeholder="Skill name" style="flex:1;"/><input type="text" placeholder="%" style="flex:0.3;max-width:70px;"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button>`;
+  c.appendChild(row);
+}
+function addMultiRowFour(containerId) {
+  const c = document.getElementById(containerId);
+  const row = document.createElement('div');
+  row.className = 'multi-row';
+  row.innerHTML = `<input type="text" placeholder="Quote" style="flex:2;"/><input type="text" placeholder="Name"/><input type="text" placeholder="Role / Company"/><button class="multi-remove" onclick="removeMultiRow(this)">×</button>`;
+  c.appendChild(row);
+}
+function removeMultiRow(btn) {
+  btn.closest('.multi-row').remove();
+}
+
+// ── HELPERS ──
+function getSelected(groupId) {
+  return document.querySelector(`#${groupId} .opt-pill.selected`)?.textContent.trim() || '—';
+}
+function getRadio(groupId) {
+  return document.querySelector(`#${groupId} .radio-row.selected .radio-title`)?.textContent.trim() || '—';
+}
+function getToggles(containerId) {
+  const on = [];
+  document.querySelectorAll(`#${containerId} .toggle-row`).forEach(row => {
+    if (row.querySelector('.toggle.on')) {
+      on.push(row.querySelector('.toggle-label').textContent.trim());
+    }
+  });
+  return on.length ? on.join(', ') : 'None';
+}
+function getTags(containerId) {
+  return Array.from(document.querySelectorAll(`#${containerId} .tag-chip`))
+    .map(c => c.textContent.replace('×','').trim()).join(', ') || '—';
+}
+function getMultiRows(containerId) {
+  const rows = [];
+  document.querySelectorAll(`#${containerId} .multi-row`).forEach(row => {
+    const vals = Array.from(row.querySelectorAll('input')).map(i => i.value.trim()).filter(Boolean);
+    if (vals.length) rows.push(vals.join(' — '));
+  });
+  return rows.length ? rows.map((r,i) => `  ${i+1}. ${r}`).join('\n') : '  (none added)';
+}
+function v(id) { return document.getElementById(id)?.value?.trim() || '—'; }
+
+// ── GENERATE ──
+function generatePrompt() {
+  const prompt = `WEB3 PERSONAL PORTFOLIO — MASTER PROMPT v2.0
+Build me a single-file HTML Web3 personal portfolio website using ALL specifications below.
+Make it production-quality, visually stunning, fully responsive on mobile and tablet,
+and include all the sections and features selected. Use exact content provided.
+
+═══════════════════════════════════════════════════
+SECTION 1 — IDENTITY & BRANDING
+═══════════════════════════════════════════════════
+🔴 Brand Name:           ${v('brandName')}
+🔴 Tagline:              ${v('tagline')}
+🟡 One-liner Bio:        ${v('bio')}
+🟡 Profile Picture URL:  ${v('pfpUrl')}
+🟡 Profile Style:        ${getSelected('pfpStyle')}
+🟡 Logo URL:             ${v('logoUrl')}
+🟢 Favicon:              ${getSelected('favicon')} — ${v('faviconEmoji')}
+
+═══════════════════════════════════════════════════
+SECTION 2 — DESIGN & AESTHETICS
+═══════════════════════════════════════════════════
+🔴 Theme / Mode:         ${getRadio('themeMode')}
+🔴 Color Palette:        ${getSelected('colorPalette')}
+     Primary:            ${document.getElementById('color1')?.value}
+     Secondary:          ${document.getElementById('color2')?.value}
+     Accent:             ${document.getElementById('color3')?.value}
+🔴 Vibe / Aesthetic:     ${getSelected('vibeAesthetic')}
+🟡 Font Style:           ${getSelected('fontStyle')} ${v('customFont') !== '—' ? '(Custom: ' + v('customFont') + ')' : ''}
+
+═══════════════════════════════════════════════════
+SECTION 3 — ANIMATIONS & VISUAL EFFECTS
+═══════════════════════════════════════════════════
+🟡 Animation Intensity:  ${document.getElementById('animLevelVal')?.textContent}
+🟡 Scroll Animation:     ${getSelected('scrollAnim')}
+🟢 Visual Effects ON:    ${getToggles('visualFx')}
+🟢 Card Hover Effect:    ${getSelected('hoverFx')}
+🟢 Page Load Animation:  ${getSelected('pageLoad')}
+
+═══════════════════════════════════════════════════
+SECTION 4 — LAYOUT & ORIENTATION
+═══════════════════════════════════════════════════
+🟡 Hero Layout:          ${getRadio('heroLayout')}
+🟡 Section Layout:       ${getSelected('sectionLayout')}
+🟡 Spacing Style:        ${document.getElementById('spacingVal')?.textContent}
+🟢 Mobile Layout:        ${getSelected('mobileLayout')}
+🟢 Card Border Radius:   ${getSelected('borderRadius')}
+
+═══════════════════════════════════════════════════
+SECTION 5 — NAVIGATION
+═══════════════════════════════════════════════════
+🔴 Nav Style:            ${getRadio('navStyle')}
+🟡 Nav Links:            ${getTags('navLinkTags')}
+🟢 Nav Extra Features:   ${getToggles('toggle-wrap')}
+
+═══════════════════════════════════════════════════
+SECTION 6 — HERO SECTION
+═══════════════════════════════════════════════════
+🔴 Main Heading:         ${v('heroHeading')}
+🔴 Sub Heading:          ${v('heroSub')}
+🟡 Button 1:             ${v('btn1Text')} → ${v('btn1Link')}
+🟡 Button 2:             ${v('btn2Text')} → ${v('btn2Link')}
+🟡 Status Badge:         ${v('statusBadge')} (style: ${getSelected('badgeColor')})
+🟢 Hero Stats:
+${getMultiRows('statsMulti')}
+🟢 Scroll Indicator:     ${getSelected('scrollIndicator')}
+
+═══════════════════════════════════════════════════
+SECTION 7 — ABOUT ME
+═══════════════════════════════════════════════════
+🟡 Include About:        ${getSelected('includeAbout')}
+🟡 Bio Text:
+  "${v('aboutText')}"
+🟡 Personal Details:
+${getMultiRows('detailsMulti')}
+🟢 Fun Facts:            ${v('funFacts')}
+
+═══════════════════════════════════════════════════
+SECTION 8 — SERVICES / WHAT I DO
+═══════════════════════════════════════════════════
+🔴 Display Style:        ${getSelected('serviceStyle')}
+🔴 Services List:
+${getMultiRows('servicesMulti')}
+
+═══════════════════════════════════════════════════
+SECTION 9 — SKILLS & TECH STACK
+═══════════════════════════════════════════════════
+🟡 Display Style:        ${getSelected('skillStyle')}
+🟡 Skills:
+${getMultiRows('skillsMulti')}
+🟢 Tool/Platform Badges: ${getTags('toolBadges')}
+
+═══════════════════════════════════════════════════
+SECTION 10 — PORTFOLIO / PROJECTS
+═══════════════════════════════════════════════════
+🟡 Display Style:        ${getSelected('projStyle')}
+🟡 Projects:
+${getMultiRows('projectsMulti')}
+🟢 Project Link Style:   ${getSelected('projLinks')}
+
+═══════════════════════════════════════════════════
+SECTION 11 — TESTIMONIALS
+═══════════════════════════════════════════════════
+🟢 Include:              ${getSelected('includeTest')}
+🟢 Display Style:        ${getSelected('testStyle')}
+🟢 Testimonials:
+${getMultiRows('testMulti')}
+
+═══════════════════════════════════════════════════
+SECTION 12 — BLOG / ARTICLES
+═══════════════════════════════════════════════════
+🟢 Include Blog:         ${getSelected('includeBlog')}
+🟢 Blog URL:             ${v('blogUrl')}
+
+═══════════════════════════════════════════════════
+SECTION 13 — SOCIALS & CONTACT
+═══════════════════════════════════════════════════
+🔴 Twitter / X:          ${v('socialX')}
+🔴 Telegram:             ${v('socialTg')}
+   Discord:              ${v('socialDc')}
+   LinkedIn:             ${v('socialLi')}
+   GitHub:               ${v('socialGh')}
+   Email:                ${v('socialEmail')}
+   Website:              ${v('socialWeb')}
+🟡 Contact Style:        ${getSelected('contactStyle')}
+🟡 CTA Text:             ${v('ctaText')}
+
+═══════════════════════════════════════════════════
+SECTION 14 — FOOTER
+═══════════════════════════════════════════════════
+🟡 Footer Text:          ${v('footerText')}
+🟢 Footer Style:         ${getSelected('footerStyle')}
+
+═══════════════════════════════════════════════════
+SECTION 15 — EXTRA FEATURES & WIDGETS
+═══════════════════════════════════════════════════
+🟢 Extra Features ON:    ${getToggles('visualFx')}
+   SEO Meta Title:       ${v('metaTitle')}
+   SEO Meta Description: ${v('metaDesc')}
+   OG Image:             ${v('ogImage')}
+🟢 Extra Notes:
+  "${v('extraNotes')}"
+
+═══════════════════════════════════════════════════
+PRODUCTION REQUIREMENTS
+═══════════════════════════════════════════════════
+- Single-file HTML (all CSS and JS inline)
+- All sections separated with clear spacing (no cramped layouts)
+- Fully responsive: mobile, tablet, and desktop
+- No broken images — use placeholder SVGs if URLs fail
+- All external links must have rel="noopener noreferrer"
+- Semantic HTML5 with proper aria-labels for accessibility
+- Smooth scrolling and seamless section transitions
+- Crypto ticker if requested must loop seamlessly
+- Do NOT compact or minify the output code
+- Include generous padding/margin between all sections
+`;
+
+  document.getElementById('promptText').textContent = prompt;
+  document.getElementById('promptOutput').classList.add('visible');
+  setTimeout(() => document.getElementById('promptOutput').scrollIntoView({behavior:'smooth', block:'start'}), 100);
+}
+
+function copyPrompt() {
+  const text = document.getElementById('promptText').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✓ Copied!';
+    setTimeout(() => btn.textContent = 'Copy Prompt', 2000);
+  });
+}
+</script>
+</body>
+</html>
